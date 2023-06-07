@@ -1,0 +1,44 @@
+.navbar-nav.ml-auto {
+    margin-left: auto;
+         
+}
+.nav-link {
+    margin-right: 20px;
+    
+  }
+  
+  .btn-primary {
+    background-color: blue;
+    border-color: black;
+  }
+  .navbar{
+    padding-bottom: 10px;
+  }
+  .body{
+    height: 80%;
+  }
+  .bottom{
+    padding-top: 15PX;
+  }
+  #head{
+    font-family: sans-seriff;
+  }
+  #about{
+    font-family: cursive;
+    font-size: 17px;
+    padding-left: 5px;
+    padding-top: 10px;
+  }
+  #servit{
+    padding-top: 7px;
+    
+  }
+  .card{
+    float: left;
+
+   margin-bottom: 20px; /* Increase the bottom margin */
+ }
+  .work{
+    height: 200px;
+    padding-block: 23px;
+  }

@@ -19,26 +19,14 @@
       <li class="nav-item">
         <a class="nav-link text-dark" href="#head">About Us</a>
       </li>
+      
       <?php
       session_start();
       if(isset($_SESSION["user"])){
         echo '<li class="nav-item">
                 <a class="nav-link text-dark" href="logout.php">Logout</a>
               </li>';
-      } else {
-        echo '<li class="nav-item dropdown">
-        <a class="nav-link text-dark dropdown-toggle" href="login.php" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Login
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="volunteer.php">Volunteer</a></li>
-          <li><a class="dropdown-item" href="organiser.php">Organizer</a></li>
-        </ul>
-      </li>
-              <li class="nav-item">
-                <a class="nav-link text-white btn btn-primary bg-black" href="registration.php">Sign Up</a>
-              </li>';
-      }
+      } 
       ?>
     </ul>
   </div>
@@ -84,9 +72,9 @@
     </div>
   </div>
 </div>
+
 <!-- Add Bootstrap JavaScript links if needed -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-
 
 </body>
 </html>

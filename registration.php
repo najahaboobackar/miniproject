@@ -105,7 +105,8 @@ if ($prepareStmt) {
 
 </form>
 <div>
-    <div><p> alraedy registered<a href="login.php"> login here</a></p></div>
+    <div><p> alraedy registered<a href="volunteer.php">  Volunteer login</a></p></div>
+    <div><p> alraedy registered<a href="organiser.php"> organiser login</a></p></div>
 </div>
 </div>
     

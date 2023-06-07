@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(isset($_SESSION["user"])){
-    header("Location:index.php");
+    header("Location:page2.php");
 }
 
 
@@ -40,7 +40,7 @@ if ($user) {
 if (password_verify($password, $user["password"])){
     session_start();
     $_SESSION["user"]="yes";
-header("Location:index.php");
+header("Location:page2.php");
 die();
 }else{
 
@@ -51,7 +51,7 @@ else{
 echo "<div class='alert alert-danger'>Email does not match</div>";
 }}
 ?>
-<form action="login.php" method="post">
+<form action="volunteer.php" method="post">
 
 <div class="form-group">
 
