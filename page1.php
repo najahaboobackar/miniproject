@@ -14,8 +14,8 @@
       margin-bottom: 20px;
     }
     .post img {
-      max-width: 100%;
-      height: auto;
+      max-width: 40%;
+      height: 300px;
     }
   </style>
 </head>
@@ -33,7 +33,7 @@
       </li>
       <?php
       session_start();
-      if(isset($_SESSION["user"])){
+      if(isset($_SESSION["posts"])){
         echo '<li class="nav-item">
                 <a class="nav-link text-dark" href="logout.php">Logout</a>
               </li>';
@@ -45,10 +45,34 @@
 <div class="top">
   <h1>Welcome to SERVIT</h1>
   <h4>Create Room</h4>
-  <form action="create-room.php" method="POST" enctype="multipart/form-data">
+  <form action="page1.php" method="POST" enctype="multipart/form-data">
+
     <div class="mb-3">
-      <label for="photo" class="form-label">Photo:</label>
-      <input type="file" class="form-control" id="photo" name="photo">
+    <label for="photo" class="form-label">Photo:</label>
+<input type="file" class="form-control" id="photo" name="photo" onchange="previewImage(event)">
+<img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 100%; height: auto; margin-top: 10px;">
+
+<script>
+function previewImage(event) {
+  var input = event.target;
+  var preview = document.getElementById('imagePreview');
+
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    }
+
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    preview.src = '#';
+    preview.style.display = 'none';
+  }
+}
+</script>
+
     </div>
     <div class="mb-3">
       <label for="venue" class="form-label">Venue:</label>
@@ -59,8 +83,8 @@
       <input type="date" class="form-control" id="date" name="date">
     </div>
     <div class="mb-3">
-      <label for="limit" class="form-label">Volunteer Limit:</label>
-      <input type="number" class="form-control" id="limit" name="limit">
+      <label for="limit1" class="form-label">Volunteer Limit:</label>
+      <input type="number" class="form-control" id="limit1" name="limit">
     </div>
     <button type="submit" class="btn btn-primary">Create Room</button>
   </form>
@@ -68,25 +92,65 @@
 
 <div class="container mt-4">
   <h2>Recent Posts</h2>
+  
   <?php
-  // Retrieve and display posts from the database
-  // Replace with your database connection code and query to fetch posts
-  $posts = [
-    ['photo' => 'path-to-photo1.jpg', 'venue' => 'Venue 1', 'date' => '2023-06-07', 'limit' => 10],
-    ['photo' => 'path-to-photo2.jpg', 'venue' => 'Venue 2', 'date' => '2023-06-08', 'limit' => 5],
-    // Add more posts as needed
-  ];
 
-  foreach ($posts as $post) {
-    echo '<div class="post">';
-    echo '<img src="' . $post['photo'] . '" alt="Post Photo">';
-    echo '<p>Venue: ' . $post['venue'] . '</p>';
-    echo '<p>Date: ' . $post['date'] . '</p>';
-    echo '<p>Volunteer Limit: ' . $post['limit'] . '</p>';
-    // Add any other information you want to display for each post
-    echo '</div>';
+  // Database connection
+  $servername = "localhost";
+  $username = "root";
+  $password = "";
+  $dbname = "login_register";
+
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
   }
+
+  // Check if the form is submitted
+  if ($_SERVER["REQUEST_METHOD"] === "POST") {
+      $photo = $_FILES["photo"]["name"];
+      $venue = $_POST["venue"];
+      $date = $_POST["date"];
+      $limit1 = $_POST["limit"];
+
+      // Upload the photo file
+      $targetDirectory = "uploads/"; // Specify the directory where you want to save the uploaded files
+      $targetFile = $targetDirectory . basename($photo);
+      move_uploaded_file($_FILES["photo"]["tmp_name"], $targetFile);
+
+      // Prepare and execute the SQL query to insert the form data into the database
+      $sql = "INSERT INTO posts (photo, venue, date, `limit1`) VALUES ('$photo', '$venue', '$date', $limit1)";
+      if ($conn->query($sql) === TRUE) {
+          echo "Post created successfully";
+      } else {
+          echo "Error creating post: " . $conn->error;
+      }
+  }
+
+  // Retrieve and display posts from the database
+  $sql = "SELECT * FROM posts";
+  $result = $conn->query($sql);
+
+  if ($result->num_rows > 0) {
+      while ($row = $result->fetch_assoc()) {
+          echo '<div class="post">';
+          echo '<img src="uploads/' . $row['photo'] . '" class="card-img-top" alt="Post Photo"." width:50px">';
+
+          echo '<p>Venue: ' . $row['venue'] . '</p>';
+          echo '<p>Date: ' . $row['date'] . '</p>';
+          echo '<p>Volunteer Limit: ' . $row['limit1'] . '</p>';
+          // Add any other information you want to display for each post
+          echo '</div>';
+      }
+  } else {
+      echo "No posts found";
+  }
+
+  // Close the database connection
+  $conn->close();
   ?>
+
 </div>
 
 <!-- Add Bootstrap JavaScript links if needed -->
