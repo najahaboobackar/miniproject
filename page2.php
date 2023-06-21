@@ -40,48 +40,61 @@
 
    
   <?php
-  // Database connection
-  $servername = "localhost";
-  $username = "root";
-  $password = "";
-  $dbname = "login_register";
-
-  $conn = new mysqli($servername, $username, $password, $dbname);
-
-  if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
-  }
-
+  
+   // Database connection
+   $servername = "localhost";
+   $username = "root";
+   $password = "";
+   $dbname = "login_register";
+ 
+   $conn = new mysqli($servername, $username, $password, $dbname);
+ 
+   if ($conn->connect_error) {
+     die("Connection failed: " . $conn->connect_error);
+   }
   // Retrieve and display posts from the database
   $sql = "SELECT * FROM posts";
   $result = $conn->query($sql);
 
+  
   if ($result->num_rows > 0) {
-      while ($row = $result->fetch_assoc()) {
-          echo '<div class="post">';
-          echo '<img src="uploads/' . $row['photo'] . '" class="card-img-top" alt="Post Photo" width="50px">';
-          echo '<p>Venue: ' . $row['venue'] . '</p>';
-          echo '<p>Date: ' . $row['date'] . '</p>';
-          echo '<p>Volunteer Limit: ' . $row['limit1'] . '</p>';
+    while ($row = $result->fetch_assoc()) {
+        echo '<div class="post">';
+        echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" width="50px">';
+        echo '<p>Venue: ' . $row['venue'] . '</p>';
+        echo '<p>Date: ' . $row['date'] . '</p>';
+        echo '<p>Volunteer Limit: ' . $row['limit1'] . '</p>';
+        echo '<p>Email: ' . $row['email'] . '</p>';
 
-          // Add the join button and form to submit the post details to page2.php
-          echo '<form action="page2.php" method="POST">';
-          echo '<input type="hidden" name="post_id" value="' . $row['id'] . '">';
-          echo '<input type="hidden" name="venue" value="' . $row['venue'] . '">';
-          echo '<input type="hidden" name="date" value="' . $row['date'] . '">';
-          echo '<input type="hidden" name="limit1" value="' . $row['limit1'] . '">';
-          echo '<button type="submit" class="btn btn-primary">Join</button>';
-          echo '</form>';
+        // Add the join button and form to submit the post details to page1.php
+        echo '<form method="POST">';
+        echo '<input type="hidden" name="p" value="' . $row['id'] . '">';
+        echo '<input type="hidden" name="venue" value="' . $row['venue'] . '">';
+        echo '<input type="hidden" name="date" value="' . $row['date'] . '">';
+        echo '<input type="hidden" name="limit1" value="' . $row['limit1'] . '">';
+        echo '<input type="hidden" name="email" value="' . $row['email'] . '">';
+        echo '<input type="hidden" name="photo" value="' . $row['photo'] . '">';
+        echo '<button type="submit" class="btn btn-primary">Join</button>';
+        
+      
+        
+        
+        echo '</form>';
 
-          echo '</div>';
-      }
-  } else {
-      echo "No posts found";
-  }
+        echo '</div>';
+    }
+} else {
+    echo "No posts found";
+}
+
 
   // Close the database connection
   $conn->close();
   ?>
+</div>
+
+
+
 </div>
 
 <!-- Add Bootstrap JavaScript links if needed -->

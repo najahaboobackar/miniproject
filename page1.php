@@ -46,38 +46,37 @@
     </ul>
   </div>
 </nav>
+
 <div class="top">
   <h1>Welcome to SERVIT</h1>
   <h4>Create Room</h4>
-  <form action="page2.php" method="POST" enctype="multipart/form-data">
-
+  <form method="POST" enctype="multipart/form-data">
     <div class="mb-3">
-    <label for="photo" class="form-label">Photo:</label>
-<input type="file" class="form-control" id="photo" name="photo" onchange="previewImage(event)">
-<img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 50%; height: auto; margin-top: 10px;">
+      <label for="photo" class="form-label">Photo:</label>
+      <input type="file" class="form-control" id="photo" name="photo" onchange="previewImage(event)">
+      <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 50%; height: auto; margin-top: 10px;">
+      <script>
+        function previewImage(event) {
+          var input = event.target;
+          var preview = document.getElementById('imagePreview');
 
-<script>
-function previewImage(event) {
-  var input = event.target;
-  var preview = document.getElementById('imagePreview');
+          if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
+            reader.onload = function (e) {
+              preview.src = e.target.result;
+              preview.style.display = 'block';
+            }
 
-    reader.onload = function (e) {
-      preview.src = e.target.result;
-      preview.style.display = 'block';
-    }
-
-    reader.readAsDataURL(input.files[0]);
-  } else {
-    preview.src = '#';
-    preview.style.display = 'none';
-  }
-}
-</script>
-
+            reader.readAsDataURL(input.files[0]);
+          } else {
+            preview.src = '#';
+            preview.style.display = 'none';
+          }
+        }
+      </script>
     </div>
+    
     <div class="mb-3">
       <label for="venue" class="form-label">Venue:</label>
       <input type="text" class="form-control" id="venue" name="venue">
@@ -90,13 +89,16 @@ function previewImage(event) {
       <label for="limit1" class="form-label">Volunteer Limit:</label>
       <input type="number" class="form-control" id="limit1" name="limit">
     </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email:</label>
+      <input type="email" class="form-control" id="email" name="email">
+    </div>
     <button type="submit" class="btn btn-primary">Create Room</button>
   </form>
 </div>
 
 <div class="container mt-4">
   <h2>Recent Posts</h2>
-  
   <?php
   // Database connection
   $servername = "localhost";
@@ -107,7 +109,34 @@ function previewImage(event) {
   $conn = new mysqli($servername, $username, $password, $dbname);
 
   if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
+  }
+
+  // Handle form submission
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $venue = $_POST["venue"];
+    $date = $_POST["date"];
+    $limit = $_POST["limit"];
+    $email = $_POST["email"];
+
+    // Retrieve the uploaded photo details
+    $photo = $_FILES["photo"];
+    $photoName = $photo["name"];
+    $photoTmpName = $photo["tmp_name"];
+    $photoError = $photo["error"];
+
+    // Move the uploaded photo to the uploads directory
+    $targetDirectory = "uploads/";
+    $targetFilePath = $targetDirectory . basename($photoName);
+    move_uploaded_file($photoTmpName, $targetFilePath);
+
+    // Insert the post details and photo path into the database
+    $sql = "INSERT INTO posts (venue, date, limit1, email, photo) VALUES ('$venue', '$date', '$limit', '$email', '$targetFilePath')";
+    if ($conn->query($sql) === TRUE) {
+      echo "Post created successfully";
+    } else {
+      echo "Error: " . $sql . "<br>" . $conn->error;
+    }
   }
 
   // Retrieve and display posts from the database
@@ -115,26 +144,28 @@ function previewImage(event) {
   $result = $conn->query($sql);
 
   if ($result->num_rows > 0) {
-      while ($row = $result->fetch_assoc()) {
-          echo '<div class="post">';
-          echo '<img src="uploads/' . $row['photo'] . '" class="card-img-top" alt="Post Photo" width="50px">';
-          echo '<p>Venue: ' . $row['venue'] . '</p>';
-          echo '<p>Date: ' . $row['date'] . '</p>';
-          echo '<p>Volunteer Limit: ' . $row['limit1'] . '</p>';
+    while ($row = $result->fetch_assoc()) {
+      echo '<div class="post">';
+      echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" width="50px">';
+      echo '<p>Venue: ' . $row['venue'] . '</p>';
+      echo '<p>Date: ' . $row['date'] . '</p>';
+      echo '<p>Volunteer Limit: ' . $row['limit1'] . '</p>';
+      echo '<p>Email: ' . $row['email'] . '</p>';
 
-          // Add the join button and form to submit the post details to page2.php
-          echo '<form action="page2.php" method="POST">';
-          echo '<input type="hidden" name="post_id" value="' . $row['id'] . '">';
-          echo '<input type="hidden" name="venue" value="' . $row['venue'] . '">';
-          echo '<input type="hidden" name="date" value="' . $row['date'] . '">';
-          echo '<input type="hidden" name="limit1" value="' . $row['limit1'] . '">';
-        
-          echo '</form>';
+      // Add the join button and form to submit the post details to page1.php
+      echo '<form method="POST">';
+      echo '<input type="hidden" name="p" value="' . $row['id'] . '">';
+      echo '<input type="hidden" name="venue" value="' . $row['venue'] . '">';
+      echo '<input type="hidden" name="date" value="' . $row['date'] . '">';
+      echo '<input type="hidden" name="limit1" value="' . $row['limit1'] . '">';
+      echo '<input type="hidden" name="email" value="' . $row['email'] . '">';
+      echo '<input type="hidden" name="photo" value="' . $row['photo'] . '">';
+      echo '</form>';
 
-          echo '</div>';
-      }
+      echo '</div>';
+    }
   } else {
-      echo "No posts found";
+    echo "No posts found";
   }
 
   // Close the database connection
