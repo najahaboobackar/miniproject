@@ -37,7 +37,11 @@
         echo '<li class="nav-item">
                 <a class="nav-link text-dark" href="logout.php">Logout</a>
               </li>';
-      } 
+      } else { 
+        echo '<li class="nav-item">
+                <a class="nav-link text-dark" href="logout.php">Logout</a>
+              </li>';
+      }
       ?>
     </ul>
   </div>
@@ -45,12 +49,12 @@
 <div class="top">
   <h1>Welcome to SERVIT</h1>
   <h4>Create Room</h4>
-  <form action="page1.php" method="POST" enctype="multipart/form-data">
+  <form action="page2.php" method="POST" enctype="multipart/form-data">
 
     <div class="mb-3">
     <label for="photo" class="form-label">Photo:</label>
 <input type="file" class="form-control" id="photo" name="photo" onchange="previewImage(event)">
-<img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 100%; height: auto; margin-top: 10px;">
+<img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 50%; height: auto; margin-top: 10px;">
 
 <script>
 function previewImage(event) {
@@ -94,7 +98,6 @@ function previewImage(event) {
   <h2>Recent Posts</h2>
   
   <?php
-
   // Database connection
   $servername = "localhost";
   $username = "root";
@@ -107,27 +110,6 @@ function previewImage(event) {
       die("Connection failed: " . $conn->connect_error);
   }
 
-  // Check if the form is submitted
-  if ($_SERVER["REQUEST_METHOD"] === "POST") {
-      $photo = $_FILES["photo"]["name"];
-      $venue = $_POST["venue"];
-      $date = $_POST["date"];
-      $limit1 = $_POST["limit"];
-
-      // Upload the photo file
-      $targetDirectory = "uploads/"; // Specify the directory where you want to save the uploaded files
-      $targetFile = $targetDirectory . basename($photo);
-      move_uploaded_file($_FILES["photo"]["tmp_name"], $targetFile);
-
-      // Prepare and execute the SQL query to insert the form data into the database
-      $sql = "INSERT INTO posts (photo, venue, date, `limit1`) VALUES ('$photo', '$venue', '$date', $limit1)";
-      if ($conn->query($sql) === TRUE) {
-          echo "Post created successfully";
-      } else {
-          echo "Error creating post: " . $conn->error;
-      }
-  }
-
   // Retrieve and display posts from the database
   $sql = "SELECT * FROM posts";
   $result = $conn->query($sql);
@@ -135,12 +117,20 @@ function previewImage(event) {
   if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
           echo '<div class="post">';
-          echo '<img src="uploads/' . $row['photo'] . '" class="card-img-top" alt="Post Photo"." width:50px">';
-
+          echo '<img src="uploads/' . $row['photo'] . '" class="card-img-top" alt="Post Photo" width="50px">';
           echo '<p>Venue: ' . $row['venue'] . '</p>';
           echo '<p>Date: ' . $row['date'] . '</p>';
           echo '<p>Volunteer Limit: ' . $row['limit1'] . '</p>';
-          // Add any other information you want to display for each post
+
+          // Add the join button and form to submit the post details to page2.php
+          echo '<form action="page2.php" method="POST">';
+          echo '<input type="hidden" name="post_id" value="' . $row['id'] . '">';
+          echo '<input type="hidden" name="venue" value="' . $row['venue'] . '">';
+          echo '<input type="hidden" name="date" value="' . $row['date'] . '">';
+          echo '<input type="hidden" name="limit1" value="' . $row['limit1'] . '">';
+        
+          echo '</form>';
+
           echo '</div>';
       }
   } else {
@@ -150,7 +140,6 @@ function previewImage(event) {
   // Close the database connection
   $conn->close();
   ?>
-
 </div>
 
 <!-- Add Bootstrap JavaScript links if needed -->

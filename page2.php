@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>home</title>
+  <title>Join Room</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,58 +19,69 @@
       <li class="nav-item">
         <a class="nav-link text-dark" href="#head">About Us</a>
       </li>
-      
       <?php
       session_start();
-      if(isset($_SESSION["user"])){
+      if(isset($_SESSION["posts"])){
         echo '<li class="nav-item">
                 <a class="nav-link text-dark" href="logout.php">Logout</a>
               </li>';
-      } 
+      } else {
+        echo '<li class="nav-item">
+                <a class="nav-link text-dark" href="logout.php">Logout</a>
+              </li>';
+      }
       ?>
     </ul>
   </div>
 </nav>
 
-<div class="body">
-  <img src="helpingyourcommunity1024x674-1@2x.png" style="height: 741px;" width="1349px" alt="Image">
-</div>
+<div class="container mt-4">
+  <h2>Join Room</h2>
 
-<div class="bottom">
-  <h1 id="head">
-    About Us
-  </h1>
-  <p id="about">
-    Welcome to SERVIT, a dedicated platform for volunteering and making a positive impact on communities. Our mission is to connect passionate individuals with meaningful volunteer opportunities. We believe in the power of collective action and strive to create a world where everyone has the chance to contribute their time and skills for the betterment of society. Through our user-friendly platform, we aim to inspire and empower individuals to take part in various volunteer projects, ranging from environmental conservation and education to humanitarian aid and community development. Join us in making a difference and be a part of the change!
-  </p>
-</div>
+   
+  <?php
+  // Database connection
+  $servername = "localhost";
+  $username = "root";
+  $password = "";
+  $dbname = "login_register";
 
-<div class="work">
-  <div class="card" style="width: 21rem;">
-    <img src="helpingyourcommunity1024x674-1@2x.png" class="card-img-top" alt="...">
-    <div class="card-body">
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
-  <div class="card" style="width: 21rem;">
-    <img src="" class="card-img-top" alt="...">
-    <div class="card-body">
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
-  <div></div>
-  <div class="card" style="width: 21rem;">
-    <img src="" class="card-img-top" alt="...">
-    <div class="card-body">
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
-  <div class="card" style="width: 21rem;">
-    <img src="" class="card-img-top" alt="...">
-    <div class="card-body">
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+  }
+
+  // Retrieve and display posts from the database
+  $sql = "SELECT * FROM posts";
+  $result = $conn->query($sql);
+
+  if ($result->num_rows > 0) {
+      while ($row = $result->fetch_assoc()) {
+          echo '<div class="post">';
+          echo '<img src="uploads/' . $row['photo'] . '" class="card-img-top" alt="Post Photo" width="50px">';
+          echo '<p>Venue: ' . $row['venue'] . '</p>';
+          echo '<p>Date: ' . $row['date'] . '</p>';
+          echo '<p>Volunteer Limit: ' . $row['limit1'] . '</p>';
+
+          // Add the join button and form to submit the post details to page2.php
+          echo '<form action="page2.php" method="POST">';
+          echo '<input type="hidden" name="post_id" value="' . $row['id'] . '">';
+          echo '<input type="hidden" name="venue" value="' . $row['venue'] . '">';
+          echo '<input type="hidden" name="date" value="' . $row['date'] . '">';
+          echo '<input type="hidden" name="limit1" value="' . $row['limit1'] . '">';
+          echo '<button type="submit" class="btn btn-primary">Join</button>';
+          echo '</form>';
+
+          echo '</div>';
+      }
+  } else {
+      echo "No posts found";
+  }
+
+  // Close the database connection
+  $conn->close();
+  ?>
 </div>
 
 <!-- Add Bootstrap JavaScript links if needed -->
