@@ -29,7 +29,7 @@ $email = $_POST["email"];
 
 $password= $_POST["password"]; require_once "database.php";
 
-$sql = "SELECT * FROM users WHERE email = '$email'";
+$sql = "SELECT * FROM users1 WHERE email = '$email'";
 
 $result = mysqli_query($conn, $sql);
 
@@ -67,7 +67,7 @@ echo "<div class='alert alert-danger'>Email does not match</div>";
 
 </div> </form>
 <div>
-    <p> not registered yet<a href="registration.php"> register here</a></p>
+    <p> not registered yet<a href="reg1.php"> register here</a></p>
 </div>
 
 </div>

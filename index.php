@@ -35,9 +35,10 @@
           <li><a class="dropdown-item" href="organiser.php">Organizer</a></li>
         </ul>
       </li>
-              <li class="nav-item">
-                <a class="nav-link text-white btn btn-primary bg-black" href="registration.php">Sign Up</a>
-              </li>';
+      <li class="nav-item">
+      <a class="nav-link text-white btn btn-primary bg-black" href="registration.php">Sign Up</a>
+    </li>';
+    
       }
       ?>
     </ul>

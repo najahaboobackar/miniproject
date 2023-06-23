@@ -45,7 +45,7 @@ if ($password!== $passwordRepeat) { array_push($errors, "Password does not match
 }
 require_once "database.php";
 
-$sql = "SELECT * FROM users WHERE email = '$email'";
+$sql = "SELECT * FROM users1 WHERE email = '$email'";
 
 $result = mysqli_query($conn, $sql);
  $rowCount = mysqli_num_rows($result);
@@ -63,7 +63,7 @@ echo "<div class='alert alert-danger'>$error</div>";
 }
 else
 {
-$sql = "INSERT INTO users(full_name, email, password) VALUES (?, ?, ?)";
+$sql = "INSERT INTO users1(full_name, email, password) VALUES (?, ?, ?)";
 $stmt = mysqli_stmt_init($conn);
 $prepareStmt = mysqli_stmt_prepare($stmt, $sql);
 
@@ -83,7 +83,7 @@ if ($prepareStmt) {
 }
  ?>
 
-<form action="registration.php" method="post"> <div class="form-group">
+<form action="reg1.php" method="post"> <div class="form-group">
 
 <input type="text" name="fullname" class="form-control" placeholder="Full Name:"> </div>
 
@@ -105,8 +105,8 @@ if ($prepareStmt) {
 
 </form>
 <div>
-    <div><p> alraedy registered<a href="volunteer.php">  Volunteer login</a></p></div>
-
+    
+    <div><p> alraedy registered<a href="organiser.php"> organiser login</a></p></div>
 </div>
 </div>
     
