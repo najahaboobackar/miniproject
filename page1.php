@@ -41,6 +41,9 @@
         echo '<li class="nav-item">
                 <a class="nav-link text-dark" href="logout.php">Logout</a>
               </li>';
+             echo '<li class="nav-item">
+                <a class="nav-link text-dark" href="detail.php">details</a>
+              </li>';
       }
       ?>
     </ul>
@@ -140,7 +143,7 @@
   }
 
   // Retrieve and display posts from the database
-  $sql = "SELECT * FROM posts";
+  $sql = "SELECT * FROM posts ORDER BY id DESC";
   $result = $conn->query($sql);
 
   if ($result->num_rows > 0) {
