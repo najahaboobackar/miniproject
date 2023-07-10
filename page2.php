@@ -83,40 +83,83 @@ $result = $conn->query($sql);
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm bg-white">
+<nav class="navbar navbar-expand-sm bg-black">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
       <img src="project-logo-final-1@2x.png" height="43px" alt="Logo">
     </a>
-    <h2 id="servit">SERVIT</h2>
+    <h2 id="servit" style="color:white;">SERVIT</h2>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link text-dark" href="#head">About Us</a>
+        <a class="nav-link text-white" href="#head">About Us</a>
       </li>
       <?php
       if (isset($_SESSION["posts"])) {
           echo '<li class="nav-item">
-                <a class="nav-link text-dark" href="logout.php">Logout</a>
+                <a class="nav-link text-white" href="logout.php">Logout</a>
               </li>';
       } else {
           echo '<li class="nav-item">
-                <a class="nav-link text-dark" href="logout.php">Logout</a>
+                <a class="nav-link text-white" href="logout.php">Logout</a>
               </li>';
       }
       ?>
     </ul>
   </div>
 </nav>
+<style>#text{margin-left:0px}</style>
+<div id="text" class="container mt-4">
+<h2 class="join-room-heading" style="color: black; padding-left: 0;">Join Room</h2>
+  <p id="quote" style="font-style: italic; color: black; font-size: 18px; text-align: left;"></p>
+</div>
 
-<div class="container mt-4">
-  <h2>Join Room</h2>
+<script>
+  // Array of text content to display in a loop
+  var textArray = [
+    "Join our family",
+    "Never doubt that a small group of thoughtful, committed citizens can change the world; indeed, it's the only thing that ever has.....!"
+  ];
+
+  var quoteElement = document.getElementById("quote");
+  var index = 0;
+
+  // Function to animate and loop through the text content
+  function animateText() {
+    quoteElement.innerHTML = textArray[index];
+
+    
+
+    // Increment the index for the next text content
+    index = (index + 1) % textArray.length;
+  }
+
+  // Call the animateText function initially
+  animateText();
+
+  // Call the animateText function in a loop with a delay of 5 seconds
+  setInterval(animateText, 3000);
+</script>
+
+<style>
+  /* Add your custom CSS styles here */
+  @keyframes textMotion {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+  }
+  .custom-button {
+  background-color: black;
+  border-color: black;
+}
+
+</style>
+
 
   <?php
   if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
-          echo '<div class="post">';
+          echo '<div class="post" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; width: 48%; float: left; margin-right: 2%; margin-bottom: 2%;">';
           if (isset($row['photo'])) { // Check if 'photo' key is set
-              echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" width="50px">';
+              echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" style="width: 100%; height: auto;">';
           }
           echo '<p>Venue: ' . $row['venue'] . '</p>';
           echo '<p>Date: ' . $row['date'] . '</p>';
@@ -132,7 +175,8 @@ $result = $conn->query($sql);
           echo '<input type="hidden" name="email" value="' . $row['email'] . '">';
           echo '<input type="text" name="name" placeholder="Enter your name" required>'; // Add input field for the name
           echo '<input type="text" name="phone" placeholder="Phone number" required>'; 
-          echo '<button type="submit" name="join" class="btn btn-primary">Join</button>';
+          echo '<button type="submit" name="join" class="btn btn-primary custom-button">Join</button>';
+
           echo '</form>';
 
           echo '</div>';
@@ -140,10 +184,17 @@ $result = $conn->query($sql);
   } else {
       echo "No posts found";
   }
-
-  // Close the database connection
   $conn->close();
   ?>
+</div>
+
+
+
+
+
+
+
+  
 
 <!-- Add Bootstrap JavaScript links if needed -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
