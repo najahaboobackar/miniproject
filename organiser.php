@@ -8,6 +8,7 @@ if(isset($_SESSION["user"])){
 
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,6 +70,14 @@ echo "<div class='alert alert-danger'>Email does not match</div>";
 <div>
     <p> not registered yet<a href="reg1.php"> register here</a></p>
 </div>
+<style>.container {
+    max-width: 600px;
+    background-color: lightsteelblue;
+    margin: 110px auto;
+    padding: 50px;
+    box-shadow: rgba(100, 100, 111, 0.2) -10px 36px 150px 19px;
+    
+}</style>
 
 </div>
 </body>

@@ -109,6 +109,12 @@ if ($prepareStmt) {
 
 </div>
 </div>
+<style>.container {
+    max-width: 600px;
+    background-color: lightsteelblue;
+    padding: 50px;
+    box-shadow: rgba(100, 100, 111, 0.2) -10px 36px 150px 19px;
+}</style>
     
 </body>
 </html>

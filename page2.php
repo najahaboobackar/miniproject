@@ -48,27 +48,45 @@ if (isset($_POST['p']) && isset($_POST['join'])) {
             $conn->query($insertQuery);
 
             // Display a success message
-            echo '<div class="container mt-4">';
-            echo '<h2>Join Room</h2>';
+
+      
             echo '<div class="alert alert-success" role="alert">';
             echo 'You have successfully joined the room!';
             echo '</div>';
             echo '</div>';
         } else {
             // Display an error message when the limit is reached
-            echo '<div class="container mt-4">';
-            echo '<h2>Join Room</h2>';
+            
             echo '<div class="alert alert-danger" role="alert">';
             echo 'Sorry, the room is already full.';
             echo '</div>';
-            echo '</div>';
+            
         }
     }
 }
 
-// Retrieve and display posts from the database
-$sql = "SELECT * FROM posts ORDER BY id DESC";
+// Remove expired room participants
+$current_date = date("Y-m-d"); // get the current date in 'YYYY-MM-DD' format
+
+$deleteRoomParticipantsQuery = "DELETE rp FROM room_participants rp INNER JOIN posts p ON p.id = rp.room_id WHERE STR_TO_DATE(p.date, '%Y-%m-%d') <= STR_TO_DATE('$current_date', '%Y-%m-%d')";
+
+if ($conn->query($deleteRoomParticipantsQuery) === TRUE) {
+    echo "Participant Records were deleted successfully.";
+} else {
+    echo "ERROR: Could not able to execute $deleteRoomParticipantsQuery. " . mysqli_error($conn);
+}
+// Retrieve and display non-expired posts from the database
+$sql = "SELECT * FROM posts WHERE STR_TO_DATE(date, '%Y-%m-%d') > STR_TO_DATE('$current_date', '%Y-%m-%d') ORDER BY id DESC";
 $result = $conn->query($sql);
+
+if ($result === FALSE) {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
+
+
+
+// Retrieve and display non-expired posts from the database
 
 ?>
 
@@ -90,9 +108,7 @@ $result = $conn->query($sql);
     </a>
     <h2 id="servit" style="color:white;">SERVIT</h2>
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link text-white" href="#head">About Us</a>
-      </li>
+      
       <?php
       if (isset($_SESSION["posts"])) {
           echo '<li class="nav-item">
@@ -127,7 +143,13 @@ $result = $conn->query($sql);
   function animateText() {
     quoteElement.innerHTML = textArray[index];
 
-    
+    // Animate the text
+    quoteElement.style.animation = 'textMotion 0.5s ease-in-out';
+
+    // Reset the animation after it completes
+    setTimeout(function () {
+      quoteElement.style.animation = '';
+    }, 500);
 
     // Increment the index for the next text content
     index = (index + 1) % textArray.length;
@@ -147,10 +169,69 @@ $result = $conn->query($sql);
     100% { transform: translateY(-10px); }
   }
   .custom-button {
-  background-color: black;
-  border-color: black;
+    background-color: black;
+    border-color: black;
+  }
+
+  body {
+  background-image: url('cool-background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
+.post {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      width: 30% !important;
+      height: 600px !important;
+      BOX-SHADOW: 2px 10px 10px;
+    }
+    .post img {
+      max-width: 100%;
+      height: 300px !important;
+    }
+    .post{margin-left:;
+    margin-right: 450px;}
+    .card-img-top{
+      width:500px ;
+    }
+  
+  .card{
+    float: left;
+
+   margin-bottom: 20px; /* Increase the bottom margin */
+ }
+
+ .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .post {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 50%;  
+    float: left;
+  }
+  
+  
+  .post {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    float: left;
+    width: 30%;
+  }
+  
+  
 </style>
 
 
@@ -165,6 +246,7 @@ $result = $conn->query($sql);
           echo '<p>Date: ' . $row['date'] . '</p>';
           echo '<p>Volunteer Limit: ' . $row['limit2'] . '/' . $row['limit1'] . '</p>';
           echo '<p>Email: ' . $row['email'] . '</p>';
+          echo '<p>Content: ' . $row['content'] . '</p>';
 
           // Add the join button and form to submit the post details to page1.php
           echo '<form method="POST">';
@@ -173,7 +255,7 @@ $result = $conn->query($sql);
           echo '<input type="hidden" name="date" value="' . $row['date'] . '">';
           echo '<input type="hidden" name="limit1" value="' . $row['limit2'] . '/' . $row['limit1'] . '">';
           echo '<input type="hidden" name="email" value="' . $row['email'] . '">';
-          echo '<input type="text" name="name" placeholder="Enter your name" required>'; // Add input field for the name
+          echo '<input type="text" name="name" placeholder="Enter your name" required><br>'; // Add input field for the name
           echo '<input type="text" name="phone" placeholder="Phone number" required>'; 
           echo '<button type="submit" name="join" class="btn btn-primary custom-button">Join</button>';
 
@@ -187,14 +269,6 @@ $result = $conn->query($sql);
   $conn->close();
   ?>
 </div>
-
-
-
-
-
-
-
-  
 
 <!-- Add Bootstrap JavaScript links if needed -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

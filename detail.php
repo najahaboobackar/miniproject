@@ -42,18 +42,27 @@ $displayedPhotos = []; // Array to track the displayed photos
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm bg-white">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="project-logo-final-1@2x.png" height="43px" alt="Logo">
-        </a>
-        <h2 id="servit">SERVIT</h2>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link text-dark" href="detail.php?logout=true">Logout</a>
-            </li>
-        </ul>
-    </div>
+<nav class="navbar navbar-expand-sm bg-black">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="project-logo-final-1@2x.png" height="43px" alt="Logo">
+    </a>
+    <h2 id="servit" style="color:white;">SERVIT</h2>
+    <ul class="navbar-nav ml-auto">
+      
+      <?php
+      if (isset($_SESSION["posts"])) {
+          echo '<li class="nav-item">
+                <a class="nav-link text-white" href="logout.php">Logout</a>
+              </li>';
+      } else {
+          echo '<li class="nav-item">
+                <a class="nav-link text-white" href="logout.php">Logout</a>
+              </li>';
+      }
+      ?>
+    </ul>
+  </div>
 </nav>
 
 <div class="container mt-4">
@@ -97,6 +106,20 @@ $displayedPhotos = []; // Array to track the displayed photos
     // Close the database connection
     $conn->close();
     ?>
+<style>
+.post {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #ecf0f5;
+    BOX-SHADOW: 2px 10px 10px;
+}
+body{
+    margin:0px
+}
+
+    </style>
 
     <!-- Add Bootstrap JavaScript links if needed -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

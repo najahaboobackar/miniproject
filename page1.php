@@ -17,6 +17,19 @@
       max-width: 40%;
       height: 300px;
     }
+    
+    body {
+  background-image: url('cool-background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+  
+
+
+
   </style>
 </head>
 <body>
@@ -85,12 +98,99 @@
     padding-left: 350px;
     padding-right: 350px;
     }
+
     #btn{margin-left:618px}
     .post{margin-left:;
     margin-right: 450px;}
     .card-img-top{
       width:500px;
     }
+  
+  .card{
+    float: left;
+
+   margin-bottom: 20px; /* Increase the bottom margin */
+ }
+  .work{
+    height: 200px;
+    padding-block: 23px;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .post {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 50%;  
+    float: left;
+  }
+  
+  .post img {
+    max-width: 100%; 
+    height: auto;
+  }
+  .post {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    float: left;
+    width: 30%;
+  }
+  
+  .post img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .mb-3 {
+    padding-left: 350px;
+    padding-right: 350px;
+  }
+  
+  #btn {
+    margin-left: 618px;
+  }
+  
+  .card-img-top {
+    width: 100%; 
+  }
+  
+  .custom-button {
+    background-color: black;
+    border-color: black;
+  }
+
+  
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.post {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 30%;  
+    margin-right: 1.5%; /* to create some space between columns */
+    box-sizing: border-box; /* to include padding and border into width */
+}
+
+.post img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+  
     </style>
     <div class="mb-3">
       <label for="venue" class="form-label">Venue:</label>
@@ -108,17 +208,21 @@
       <label for="email" class="form-label">Email:</label>
       <input type="email" class="form-control" id="email" name="email">
     </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">content</label>
+      <input type="text" class="form-control" id="content" name="content">
+    </div>
     <button type="submit" class="btn btn-primary custom-button" id="btn">Create Room</button>
-<style> .custom-button {
-  background-color: black;
-  border-color: black;
-}
-</style>
+    <style> .custom-button {
+      background-color: black;
+      border-color: black;
+    }
+    </style>
   </form>
 </div>
 
 <div class="container mt-4">
-  <h2>Recent Posts</h2>
+ 
   <?php
   // Database connection
   $servername = "localhost";
@@ -138,6 +242,7 @@
     $date = $_POST["date"];
     $limit = $_POST["limit"];
     $email = $_POST["email"];
+    $content = $_POST["content"]; // Add content column value
 
     // Retrieve the uploaded photo details
     $photo = $_FILES["photo"];
@@ -151,7 +256,7 @@
     move_uploaded_file($photoTmpName, $targetFilePath);
 
     // Insert the post details and photo path into the database
-    $sql = "INSERT INTO posts (venue, date, limit1, email, photo) VALUES ('$venue', '$date', '$limit', '$email', '$targetFilePath')";
+    $sql = "INSERT INTO posts (venue, date, limit1, email, content, photo) VALUES ('$venue', '$date', '$limit', '$email', '$content', '$targetFilePath')";
     if ($conn->query($sql) === TRUE) {
       echo "Post created successfully";
     } else {
@@ -159,19 +264,19 @@
     }
   }
 
+  
   // Retrieve and display posts from the database
   $sql = "SELECT * FROM posts ORDER BY id DESC";
   $result = $conn->query($sql);
-
-  if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
+if ($result->num_rows > 0) {
+   while ($row = $result->fetch_assoc()) {
       echo '<div class="post">';
       echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" width="200px">';
       echo '<p>Venue: ' . $row['venue'] . '</p>';
       echo '<p>Date: ' . $row['date'] . '</p>';
       echo '<p>Volunteer Limit: ' . $row['limit1'] . '</p>';
       echo '<p>Email: ' . $row['email'] . '</p>';
-      
+      echo '<p>Content: ' . $row['content'] . '</p>';
 
       // Add the join button and form to submit the post details to page1.php
       echo '<form method="POST">';
