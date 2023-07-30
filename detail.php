@@ -42,22 +42,20 @@ $displayedPhotos = []; // Array to track the displayed photos
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm bg-black">
+<nav class="navbar navbar-expand-sm ">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-      <img src="project-logo-final-1@2x.png" height="43px" alt="Logo">
-    </a>
-    <h2 id="servit" style="color:white;">SERVIT</h2>
+    
+    <h2 id="servit" style="color:black;">SERVIT</h2>
     <ul class="navbar-nav ml-auto">
       
       <?php
       if (isset($_SESSION["posts"])) {
           echo '<li class="nav-item">
-                <a class="nav-link text-white" href="logout.php">Logout</a>
+                <a class="nav-link text-black" href="logout.php">Logout</a>
               </li>';
       } else {
           echo '<li class="nav-item">
-                <a class="nav-link text-white" href="logout.php">Logout</a>
+                <a class="nav-link text-black" href="logout.php">Logout</a>
               </li>';
       }
       ?>
@@ -116,7 +114,10 @@ $displayedPhotos = []; // Array to track the displayed photos
     BOX-SHADOW: 2px 10px 10px;
 }
 body{
+    background-color:#DFDFDF;
+    font-family: 'Roboto', sans-serif;
     margin:0px
+    
 }
 
     </style>

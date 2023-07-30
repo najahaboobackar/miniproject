@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="style1.css">
+
+
   <link rel="stylesheet" href="page2.css">
   <style>
     .post {
@@ -18,45 +20,87 @@
       max-width: 40%;
       height: 300px;
     }
-    
     body {
-  background-image: url('cool-background.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
-
-  
-
-
-
+      font-family: 'Roboto', sans-serif;
+      background-image:"#DFDFDF";
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
   </style>
 </head>
 <body>
+<?php
+  session_start();
 
-<nav class="navbar navbar-expand-sm bg-black">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-      <img src="project-logo-final-1@2x.png" height="43px" alt="Logo">
-    </a>
-    <h2 id="servit" style="color:white;">SERVIT</h2>
+  // Database connection
+  $servername = "localhost";
+  $username = "root";
+  $password = "";
+  $dbname = "login_register";
+
+  $conn = new mysqli($servername, $username, $password, $dbname);
+
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+
+  // Handle form submission
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $venue = $_POST["venue"];
+    $date = $_POST["date"];
+    $limit = $_POST["limit"];
+    $email = $_POST["email"];
+    $content = $_POST["content"]; // Add content column value
+
+    // Retrieve the uploaded photo details
+    $photo = $_FILES["photo"];
+    $photoName = $photo["name"];
+    $photoTmpName = $photo["tmp_name"];
+    $photoError = $photo["error"];
+
+    // Move the uploaded photo to the uploads directory
+    $targetDirectory = "uploads/";
+    $targetFilePath = $targetDirectory . basename($photoName);
+    move_uploaded_file($photoTmpName, $targetFilePath);
+
+    // Insert the post details and photo path into the database
+    $sql = "INSERT INTO posts (venue, date, limit1, email, content, photo) VALUES ('$venue', '$date', '$limit', '$email', '$content', '$targetFilePath')";
+    if ($conn->query($sql) === TRUE) {
+      $_SESSION['message'] = "Post created successfully";
+    } else {
+      $_SESSION['error'] = "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    // Redirect to avoid form resubmission when refreshing the page
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit();
+  }
+
+  // Retrieve and display posts from the database
+  $sql = "SELECT * FROM posts ORDER BY id DESC";
+  $result = $conn->query($sql);
+?>
+<nav class="navbar navbar-expand-sm ">
+<div class="container-fluid">
+   <a class="navbar-brand" href="#"> 
+  <p  style="color:black"> SERVIT</p>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link text-white" href="#head">About Us</a>
+        <a class="nav-link text-black" href="#head">About Us</a>
       </li>
       <?php
-      session_start();
       if(isset($_SESSION["posts"])){
-        echo '<li class="nav-item">
-                <a class="nav-link text-white" href="logout.php">Logout</a>
+        echo '<li class="nav-item1">
+                <a class="nav-link text-black" href="logout.php">Logout</a>
               </li>';
       } else { 
-        echo '<li class="nav-item">
-                <a class="nav-link text-white" href="logout.php">Logout</a>
+        echo '<li class="nav-item1">
+                <a class="nav-link text-black" href="logout.php">Logout</a>
               </li>';
-             echo '<li class="nav-item">
-                <a class="nav-link text-white" href="detail.php">details</a>
+             echo '<li class="nav-item1">
+                <a class="nav-link text-black" href="detail.php">details</a>
               </li>';
       }
       ?>
@@ -95,7 +139,8 @@
         }
       </script>
     </div>
-    <style>.mb-3{
+    <style>
+    .mb-3{
     padding-left: 350px;
     padding-right: 350px;
     }
@@ -189,6 +234,25 @@
     max-width: 100%;
     height: auto;
 }
+.navbar{
+    background-color:#DFDFDF;
+    
+  }
+  .nav-item{
+      
+    
+    font-family: 'Roboto', sans-serif;
+  }
+  .nav-item1{
+    padding-top:10px;
+    padding-right:55px;
+  }
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    font-family: unset;
+    padding-left: 55px;
+  }
 
 
   
@@ -199,77 +263,48 @@
     </div>
     <div class="mb-3">
       <label for="date" class="form-label">Date:</label>
-      <input type="date" class="form-control" id="date" name="date">
+      <input type="date" class="form-control"  id="date" name="date">
     </div>
     <div class="mb-3">
       <label for="limit1" class="form-label">Volunteer Limit:</label>
-      <input type="number" class="form-control" id="limit1" name="limit">
+      <input type="number" class="form-control"  id="limit1" name="limit">
     </div>
     <div class="mb-3">
       <label for="email" class="form-label">Email:</label>
-      <input type="email" class="form-control" id="email" name="email">
+      <input type="email" class="form-control"   id="email" name="email">
     </div>
     <div class="mb-3">
       <label for="content" class="form-label">content</label>
-      <input type="text" class="form-control" id="content" name="content">
+      <input type="text" class="form-control"  id="content" name="content">
     </div>
     <button type="submit" class="btn btn-primary custom-button" id="btn">Create Room</button>
     <style> .custom-button {
       background-color: black;
       border-color: black;
     }
+    .form-control {
+      background: rgba(255, 255, 255, 0.5)!important;
+    border: none !important;
+    border-radius: 4px !important;
+    box-shadow: 0 8px 6px -6px #555 !important;
+    }
     </style>
   </form>
 </div>
 
 <div class="container mt-4">
- 
   <?php
-  // Database connection
-  $servername = "localhost";
-  $username = "root";
-  $password = "";
-  $dbname = "login_register";
-
-  $conn = new mysqli($servername, $username, $password, $dbname);
-
-  if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+  if (isset($_SESSION['message'])) {
+    echo '<div class="alert alert-success">' . $_SESSION['message'] . '</div>';
+    unset($_SESSION['message']);
   }
 
-  // Handle form submission
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $venue = $_POST["venue"];
-    $date = $_POST["date"];
-    $limit = $_POST["limit"];
-    $email = $_POST["email"];
-    $content = $_POST["content"]; // Add content column value
-
-    // Retrieve the uploaded photo details
-    $photo = $_FILES["photo"];
-    $photoName = $photo["name"];
-    $photoTmpName = $photo["tmp_name"];
-    $photoError = $photo["error"];
-
-    // Move the uploaded photo to the uploads directory
-    $targetDirectory = "uploads/";
-    $targetFilePath = $targetDirectory . basename($photoName);
-    move_uploaded_file($photoTmpName, $targetFilePath);
-
-    // Insert the post details and photo path into the database
-    $sql = "INSERT INTO posts (venue, date, limit1, email, content, photo) VALUES ('$venue', '$date', '$limit', '$email', '$content', '$targetFilePath')";
-    if ($conn->query($sql) === TRUE) {
-      echo "Post created successfully";
-    } else {
-      echo "Error: " . $sql . "<br>" . $conn->error;
-    }
+  if (isset($_SESSION['error'])) {
+    echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+    unset($_SESSION['error']);
   }
 
-  
-  // Retrieve and display posts from the database
-  $sql = "SELECT * FROM posts ORDER BY id DESC";
-  $result = $conn->query($sql);
-if ($result->num_rows > 0) {
+  if ($result->num_rows > 0) {
    while ($row = $result->fetch_assoc()) {
       echo '<div class="post">';
       echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" width="200px">';
@@ -280,13 +315,14 @@ if ($result->num_rows > 0) {
       echo '<p>Content: ' . $row['content'] . '</p>';
 
       // Add the join button and form to submit the post details to page1.php
-      echo '<form method="POST">';
+      echo '<form method="POST" action="page1.php">';
       echo '<input type="hidden" name="p" value="' . $row['id'] . '">';
       echo '<input type="hidden" name="venue" value="' . $row['venue'] . '">';
       echo '<input type="hidden" name="date" value="' . $row['date'] . '">';
       echo '<input type="hidden" name="limit1" value="' . $row['limit1'] . '">';
       echo '<input type="hidden" name="email" value="' . $row['email'] . '">';
       echo '<input type="hidden" name="photo" value="' . $row['photo'] . '">';
+
       echo '</form>';
 
       echo '</div>';

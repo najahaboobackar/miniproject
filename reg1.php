@@ -99,7 +99,7 @@ if ($prepareStmt) {
 
 </div>
 
-<div class="form-group"> <input type="submit" class="btn btn-primary" value="Register" name="submit">
+<div class="form-group"> <input type="submit" class="btn btn-primary custom-button" value="Register" name="submit">
 
 </div>
 
@@ -109,6 +109,22 @@ if ($prepareStmt) {
     <div><p> alraedy registered<a href="organiser.php"> organiser login</a></p></div>
 </div>
 </div>
+<style>
+    .container{
+        background-color: #E48586;
+    margin: 110px auto;
+    padding: 50px;
+    box-shadow: -4px 3px 14px 3px;
+    }
+    .custom-button {
+    background-color: black;
+    border-color: black;
+    text :white;
+  } 
+  body {
+        background-color:#FDE5EC ;
+    }
+  </style>
     
 </body>
 </html>

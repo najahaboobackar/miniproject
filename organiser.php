@@ -64,7 +64,7 @@ echo "<div class='alert alert-danger'>Email does not match</div>";
 
 <div class="form-btn">
 
-<input type="submit" value="Login" name="login" class="btn btn-primary">
+<input type="submit" value="Login" name="login" class="btn btn-primary custom-button">
 
 </div> </form>
 <div>
@@ -72,12 +72,27 @@ echo "<div class='alert alert-danger'>Email does not match</div>";
 </div>
 <style>.container {
     max-width: 600px;
-    background-color: lightsteelblue;
+    background-color: #E48586;
     margin: 110px auto;
     padding: 50px;
-    box-shadow: rgba(100, 100, 111, 0.2) -10px 36px 150px 19px;
+    box-shadow: -4px 3px 14px 3px;
     
-}</style>
+}
+.custom-button {
+    background-color: black;
+    border-color: black;
+    text :white;
+  }
+.form-control {
+      background: rgba(255, 255, 255, 0.5)!important;
+    border: none !important;
+    border-radius: 4px !important;
+    box-shadow: 0 8px 6px -6px #555 !important;
+    }
+    body {
+        background-color:#FDE5EC ;
+    }
+    </style>
 
 </div>
 </body>

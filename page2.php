@@ -58,7 +58,7 @@ $current_date = date("Y-m-d");
 $deleteRoomParticipantsQuery = "DELETE rp FROM room_participants rp INNER JOIN posts p ON p.id = rp.room_id WHERE STR_TO_DATE(p.date, '%Y-%m-%d') <= STR_TO_DATE('$current_date', '%Y-%m-%d')";
 
 if ($conn->query($deleteRoomParticipantsQuery) === TRUE) {
-    echo "Participant Records were deleted successfully.";
+    echo "";
 } else {
     echo "ERROR: Could not able to execute $deleteRoomParticipantsQuery. " . mysqli_error($conn);
 }
@@ -82,23 +82,38 @@ if ($result === FALSE) {
   <link rel="stylesheet"  href="page2.css">
 </head>
 <body>
+  <style>
+    .glassmorphism {
+      background: rgba( 255, 255, 255, 0.25 );
+      box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+      backdrop-filter: blur( 4px );
+      -webkit-backdrop-filter: blur( 4px );
+      border-radius: 10px;
+      border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+    .navbar-brand {
+    display: flex;
+    align-items: center;
+    font-family: unset;
+    padding-left: 55px;
 
-<nav class="navbar navbar-expand-sm bg-black">
+}</style>
+
+<nav class="navbar navbar-expand-sm">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-      <img src="project-logo-final-1@2x.png" height="43px" alt="Logo">
-    </a>
-    <h2 id="servit" style="color:white;">SERVIT</h2>
+   <a class="navbar-brand" href="#"> 
+  <p  style="color:black"> SERVIT</p>
+</a>
     <ul class="navbar-nav ml-auto">
       
       <?php
       if (isset($_SESSION["posts"])) {
           echo '<li class="nav-item">
-                <a class="nav-link text-white" href="logout.php">Logout</a>
+                <a class="nav-link text-black" href="logout.php">Logout</a>
               </li>';
       } else {
           echo '<li class="nav-item">
-                <a class="nav-link text-white" href="logout.php">Logout</a>
+                <a class="nav-link text-black" href="logout.php">Logout</a>
               </li>';
       }
       ?>
@@ -107,35 +122,11 @@ if ($result === FALSE) {
 </nav>
 <style>#text{margin-left:0px}</style>
 <div id="text" class="container mt-4">
-<h2 class="join-room-heading" style="color: black; padding-left: 0;">Join Room</h2>
-  <p id="quote" style="font-style: italic; color: black; font-size: 18px; text-align: left;"></p>
+<h2 class="join-room-heading" style="color: #916DB3; padding-bottom: 10px;">Join Room</h2>
+ 
 </div>
 
-<script>
-  var textArray = [
-    "Join our family",
-    "Never doubt that a small group of thoughtful, committed citizens can change the world; indeed, it's the only thing that ever has.....!"
-  ];
 
-  var quoteElement = document.getElementById("quote");
-  var index = 0;
-
-  function animateText() {
-    quoteElement.innerHTML = textArray[index];
-
-    quoteElement.style.animation = 'textMotion 0.5s ease-in-out';
-
-    setTimeout(function () {
-      quoteElement.style.animation = '';
-    }, 500);
-
-    index = (index + 1) % textArray.length;
-  }
-
-  animateText();
-
-  setInterval(animateText, 3000);
-</script>
 
 <?php
 if (isset($_SESSION['success'])) {
@@ -152,7 +143,7 @@ if (isset($_SESSION['error'])) {
   <?php
   if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
-          echo '<div class="post" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; width: 48%; float: left; margin-right: 2%; margin-bottom: 2%;">';
+          echo '<div class="post glassmorphism" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; width: 48%; float: left; margin-right: 2%; margin-bottom: 2%;">';
           if (isset($row['photo'])) {
               echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" style="width: 100%; height: auto;">';
           }

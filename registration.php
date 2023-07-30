@@ -99,7 +99,7 @@ if ($prepareStmt) {
 
 </div>
 
-<div class="form-group"> <input type="submit" class="btn btn-primary" value="Register" name="submit">
+<div class="form-group"> <input type="submit" class="btn btn-primary custom-button" value="Register" name="submit">
 
 </div>
 
@@ -109,12 +109,20 @@ if ($prepareStmt) {
 
 </div>
 </div>
-<style>.container {
-    max-width: 600px;
-    background-color: lightsteelblue;
+<style> .container{
+        background-color: #E48586;
+    margin: 110px auto;
     padding: 50px;
-    box-shadow: rgba(100, 100, 111, 0.2) -10px 36px 150px 19px;
-}</style>
+    box-shadow: -4px 3px 14px 3px;
+    }
+    .custom-button {
+    background-color: black;
+    border-color: black;
+    text :white;
+  } 
+  body {
+        background-color:#FDE5EC ;
+    }</style>
     
 </body>
 </html>

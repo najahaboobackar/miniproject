@@ -8,11 +8,12 @@
   }
 
   body {
-  background-image: url('cool-background.png');
+    background-color:#DFDFDF;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  font-family: 'Roboto', sans-serif;
 }
 
 .post {
@@ -63,4 +64,13 @@
     margin-bottom: 20px;
     float: left;
     width: 30%;
+  }
+  .navbar{
+    background-color:#DFDFDF;
+    
+  }
+  .nav-item{
+      
+    padding-right: 55px;
+    font-family: 'Roboto', sans-serif;
   }
