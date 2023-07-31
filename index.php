@@ -446,11 +446,7 @@ session_start();
                 </li>
                 <?php
     
-      if(isset($_SESSION["user"])){
-        echo '<li class="nav-item">
-                <a class="nav-link text-dark" href="logout.php">Logout</a>
-              </li>';
-      } else {
+      
         echo '<li class="nav-item dropdown">
         <a class="nav-link text-dark dropdown-toggle" href="login.php" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         Login
@@ -464,7 +460,7 @@ session_start();
       <a class="button1"  href="registration.php">Sign Up</a>
     </li>';
     
-      }
+      
       ?>
             </ul>
         </div>
@@ -513,17 +509,17 @@ session_start();
 
         <div class="steps-container">
             <div class="step">
-                <i class="step-icon fas fa-registered"></i>
+               
                 <h3 class="step-title">Step 1: Register as a Volunteer</h3>
                 <p class="step-description">Create an account on our platform to become a registered volunteer.</p>
             </div>
             <div class="step">
-                <i class="step-icon fas fa-user"></i>
+                
                 <h3 class="step-title">Step 2: Provide Your Name and Phone Number</h3>
                 <p class="step-description">Enter your name and phone number to complete your volunteer profile.</p>
             </div>
             <div class="step">
-                <i class="step-icon fas fa-handshake"></i>
+                
                 <h3 class="step-title">Step 3: Click Join Button</h3>
                 <p class="step-description">Browse available volunteer opportunities and click the "Join" button to
                     participate.</p>
@@ -541,7 +537,7 @@ session_start();
             <div class="row">
                 <div class="col">
 
-                    <a href="mailto:servit@gmail.com"><i class="fas fa-envelope"></i> servit@gmail.com</a>
+                    <a href="mailto:servit@gmail.com">servit@gmail.com</a>
                 </div>
             </div>
         </div>

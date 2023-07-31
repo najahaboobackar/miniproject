@@ -24,17 +24,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $current_limit = 0;
 
-        $checkSql = $conn->prepare("SELECT * FROM room_participants WHERE phone = ?");
-        $checkSql->bind_param('s', $phone);
+        $checkSql = $conn->prepare("SELECT * FROM room_participants WHERE phone = ? AND room_id = ?");
+        $checkSql->bind_param('ss', $phone, $roomId);
         $checkSql->execute();
-
+        
         $checkResult = $checkSql->get_result();
-
+        
         if ($checkResult->num_rows > 0) {
-            $_SESSION["error"] = "A user with this phone number already exists.";
+            $_SESSION["error"] = "You have already joined this room.";
             header("Location: " . $_SERVER['REQUEST_URI']);
             exit();
         }
+        
 
         $selectQuery = "SELECT limit2, limit1 FROM posts WHERE id = ?";
         $stmt = $conn->prepare($selectQuery);
