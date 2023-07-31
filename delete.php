@@ -8,8 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = "";
         $dbname = "login_register";
 
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
+        $conn = new mysqli($servername, $username, $password, $dbname)
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
@@ -20,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
 
         // Delete related entries from room_participants table
-        $stmt = $conn->prepare("DELETE FROM room_participants WHERE room_id = ?");
+        $stmt = $conn->prepare("DELETE FROM room_participants WHERE room_id = ?")
         $stmt->bind_param('s', $postId);
         $stmt->execute();
 

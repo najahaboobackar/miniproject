@@ -442,7 +442,7 @@ session_start();
             </a>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link " >About Us</a>
+                    <a class="nav-link " href="#head1" >About Us</a>
                 </li>
                 <?php
     

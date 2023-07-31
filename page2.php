@@ -212,6 +212,16 @@ if ($result === FALSE) {
         margin-left: 63px;
         color: black;
     }
+    .card-img-top{
+        width: 288px;
+        height: 277px;
+    }
+   
+  .post img {
+    max-width: 100%;
+    height: 300px;
+  }
+  
     
     </style>
     <div id=head1>
@@ -233,45 +243,27 @@ if (isset($_SESSION['error'])) {
 }
 ?>
 
-    <?php
+   
+  <?php
+  // Your PHP code
+  
+  $i = 0; // Initialize counter
+  
   if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
-          echo '<div class="post glassmorphism" style="border: 6px solid #ccc; padding: 4px;; margin-bottom: 20px; ;float: left; margin-right: 0%; margin-left: 58px; margin-bottom: 2%;">';
+          $i++; // Increment counter for each room
+          echo '<div class="post glassmorphism" style="border: 6px solid #ccc;   width: 23%; padding: 4px;; margin-bottom: 20px; ;float: left; margin-right: 0%; margin-left: 58px; margin-bottom: 2%;">';
           if (isset($row['photo'])) {
-              echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" style="width: 100%; height: auto;">';
+              echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" >';
           }
           echo '<p>Venue: ' . $row['venue'] . '</p>';
           echo '<p>Date: ' . $row['date'] . '</p>';
           echo '<p>Volunteer Limit: ' . $row['limit2'] . '/' . $row['limit1'] . '</p>';
           echo '<p>Email: ' . $row['email'] . '</p>';
           echo '<p>Content: ' . $row['content'] . '</p>';
-
-          if (isset($_POST['join'])) {
-            $phone = $_POST['phone'];
-        
-            // Using a prepared statement to prevent SQL injection
-            $stmt = $conn->prepare("SELECT * FROM room_participants WHERE phone = ?");
-            $stmt->bind_param("s", $phone); // "s" indicates that the parameter is a string
-            $stmt->execute();
-        
-            $check_result = $stmt->get_result();
-        
-            if ($check_result->num_rows > 0) {
-                echo "A user with this phone number already exists.";
-            } else {
-                // Insert the user's data into the database
-                $stmt = $conn->prepare("INSERT INTO room_participants (name, phone,content) VALUES (?, ?, ?)");
-                $stmt->bind_param("ssss", $_POST['name'], $phone,$experience);
-                $stmt->execute();
-        
-                echo "You've successfully joined the room!";
-            }
-        
-            $stmt->close();
-        }
-        
-
-          echo '<form method="POST" >';
+  
+          // Form and inputs
+          echo '<form method="POST" class="post" >';
           echo '<input type="hidden" name="p" value="' . $row['id'] . '">';
           echo '<input type="hidden" name="venue" value="' . $row['venue'] . '">';
           echo '<input type="hidden" name="date" value="' . $row['date'] . '">';
@@ -280,44 +272,51 @@ if (isset($_SESSION['error'])) {
           echo '<input type="text" name="name" placeholder="Enter your name" required class="fname" ><br>';
           echo '<input type="text" name="phone" placeholder="Phone number" class="fname" required><br>'; 
           echo '<p>Previous experience:</p>';
-          echo '<input type="radio" id="option1" name="radiobutton" value="option1">';
-          echo '<label for="option1">YES</label>';
-          echo '<input type="radio" id="option2" name="radiobutton" value="option2">';
-          echo '<label for="option2">NO</label><br>';
-          
-          echo '<input type="text" name="experience" placeholder="Enter your experience" required id="experience" class="fname" style="visibility:hidden;"><br>';
-
+          echo '<input type="radio" id="option1_' . $i . '" name="radiobutton_' . $i . '" value="option1">';
+          echo '<label for="option1_' . $i . '">YES</label>';
+          echo '<input type="radio" id="option2_' . $i . '" name="radiobutton_' . $i . '" value="option2">';
+          echo '<label for="option2_' . $i . '">NO</label><br>';
+          echo '<input type="text" name="experience_' . $i . '" placeholder="Enter your experience" required id="experience_' . $i . '" class="fname" style="visibility:hidden;"><br>';
           echo '<button type="submit" name="join" class="button" onclick="return confirm(\'Terms and Conditions  \n\n By using this website, you hereby acknowledge and agree to abide by our policies, including our Privacy Policy, and agree not to misuse this website for any fraudulent or malicious activities. Any content found on this site is our exclusive property and should not be used without explicit permission. We reserve the right to terminate access for users found violating these terms. All disputes arising from the use of our website will be governed by the laws of our jurisdiction.\');">Join</button>';
-          
-
           echo '</form>';
-
+  
           echo '</div>';
       }
   } else {
       echo "No posts found";
   }
   $conn->close();
-?>
+  ?>
+  
+  
+  
 
     <!-- Add Bootstrap JavaScript links if needed -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
-$(document).ready(function() {
-    $("input[name='radiobutton']").click(function() {
-        if ($(this).val() == 'option1') {
-            $("#experience").css('visibility', 'visible');
-            $("#experience").prop('required',true);
-        }
-        else {
-            $("#experience").css('visibility', 'hidden');
-            $("#experience").prop('required',false);
+    $(document).ready(function() {
+        for (let i = 1; i <= <?php echo $i; ?>; i++) {
+            $("input[name='radiobutton_" + i + "']").click(function() {
+                if ($(this).val() == 'option1') {
+                    $("#experience_" + i).css('visibility', 'visible');
+                    $("#experience_" + i).prop('required',true);
+                }
+                else {
+                    $("#experience_" + i).css('visibility', 'hidden');
+                    $("#experience_" + i).prop('required',false);
+                }
+            });
         }
     });
-});
-</script>
-
+    </script>
+    
+    
+    
+    
+    
+    
+    
 
 </body>
 

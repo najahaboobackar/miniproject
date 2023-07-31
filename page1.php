@@ -91,9 +91,7 @@
             <a class="navbar-brand" href="#">
                 <p style="color:black"> SERVIT</p>
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-black" href="#head">About Us</a>
-                    </li>
+                    
                     <?php
       if(isset($_SESSION["posts"])){
         echo '<li class="nav-item1">
@@ -162,60 +160,15 @@
                 margin-left: 618px
             }
 
-            .post {
-                margin-left: ;
-                margin-right: 450px;
-            }
-
-            .card-img-top {
-                width: 500px;
-            }
-
-            .card {
-                float: left;
-
-                margin-bottom: 20px;
-                /* Increase the bottom margin */
-            }
-
-            .work {
-                height: 200px;
-                padding-block: 23px;
-            }
-
+           
+           
             .container {
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
             }
 
-            .post {
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                padding: 20px;
-                margin-bottom: 20px;
-                width: 50%;
-                float: left;
-            }
-
-            .post img {
-                max-width: 100%;
-                height: auto;
-            }
-
-            .post {
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                padding: 20px;
-                margin-bottom: 20px;
-                float: left;
-                width: 30%;
-            }
-
-            .post img {
-                max-width: 100%;
-                height: auto;
-            }
+           
 
             .mb-3 {
                 padding-left: 350px;
@@ -353,7 +306,7 @@
                 border: 3px solid rgba(255, 255, 255, 0.2);
                 backdrop-filter: blur(5px);
                 border-radius: 10px;
-                color: white;
+                color: black;
             }
 
            
