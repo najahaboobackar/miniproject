@@ -99,31 +99,105 @@ if ($prepareStmt) {
 
 </div>
 
-<div class="form-group"> <input type="submit" class="btn btn-primary custom-button" value="Register" name="submit">
+<div class="form-group"> <input type="submit" class="button" value="Register" name="submit">
 
 </div>
 
 </form>
 <div>
     
-    <div><p> alraedy registered<a href="organiser.php"> organiser login</a></p></div>
+    <div><p> alraedy registered<a href="organiser.php" class="register-link"> organiser login</a></p></div>
 </div>
 </div>
 <style>
-    .container{
-        background-color: #E48586;
-    margin: 110px auto;
-    padding: 50px;
-    box-shadow: -4px 3px 14px 3px;
-    }
-    .custom-button {
-    background-color: black;
-    border-color: black;
-    text :white;
-  } 
-  body {
-        background-color:#FDE5EC ;
-    }
+   .container {
+            max-width: 400px;
+            margin: 110px auto;
+            padding: 50px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+       
+        .form-control {
+            background: rgba(255, 255, 255, 0.5) !important;
+            border: none !important;
+            border-radius: 4px !important;
+            box-shadow: 0 8px 6px -6px #555 !important;
+            width: 265px;
+        }
+
+        body {
+            background-color: #DFDFDF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 21px;
+        }
+        .button{
+                
+                background: #916DB3;
+                backdrop-filter: blur(5px);
+                border-radius: 22px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 10px 20px;
+                color: black;
+                transition: all 0.3s ease;
+                font-size: 15px;
+                height: 42px;
+    
+            }
+
+
+            .button:hover {
+                background: rgba(255, 255, 255, 0.2);
+                transform: scale(1.05);
+            }
+            .register-link {
+            background: #916DB3;
+                backdrop-filter: blur(5px);
+                border-radius: 22px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 10px 16px;
+                color: black;
+                transition: all 0.3s ease;
+                font-size: 15px;
+                height: 42px;
+        }
+
+        .register-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+                transform: scale(1.05);
+        }
+
   </style>
     
 </body>

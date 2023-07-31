@@ -21,9 +21,10 @@ if (isset($_GET['logout'])) {
 }
 
 // Retrieve room participants data with name, phone, venue, and corresponding posts data
-$sql = "SELECT rp.name, rp.phone, rp.room_id, p.photo, p.date as post_date, p.venue as post_venue
-        FROM room_participants rp
-        LEFT JOIN posts p ON rp.room_id = p.id";
+$sql = "SELECT rp.name, rp.phone, rp.room_id, rp.content as experience, p.photo, p.date as post_date, p.venue as post_venue
+FROM room_participants rp
+LEFT JOIN posts p ON rp.room_id = p.id";
+
 $result = $conn->query($sql);
 
 $currentDate = date("Y-m-d");
@@ -33,6 +34,7 @@ $displayedPhotos = []; // Array to track the displayed photos
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Details</title>
     <meta charset="utf-8">
@@ -40,15 +42,16 @@ $displayedPhotos = []; // Array to track the displayed photos
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-sm ">
-  <div class="container-fluid">
-    
-    <h2 id="servit" style="color:black;">SERVIT</h2>
-    <ul class="navbar-nav ml-auto">
-      
-      <?php
+    <nav class="navbar navbar-expand-sm ">
+        <div class="container-fluid">
+
+            <h2 id="servit" style="color:black;">SERVIT</h2>
+            <ul class="navbar-nav ml-auto">
+
+                <?php
       if (isset($_SESSION["posts"])) {
           echo '<li class="nav-item">
                 <a class="nav-link text-black" href="logout.php">Logout</a>
@@ -59,14 +62,14 @@ $displayedPhotos = []; // Array to track the displayed photos
               </li>';
       }
       ?>
-    </ul>
-  </div>
-</nav>
+            </ul>
+        </div>
+    </nav>
 
-<div class="container mt-4">
-    <h2>Participant Details</h2>
+    <div class="container mt-4">
+        <h2>Participant Details</h2>
 
-    <?php
+        <?php
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $roomId = $row['room_id'];
@@ -79,20 +82,23 @@ $displayedPhotos = []; // Array to track the displayed photos
             }
             echo '<table class="table">';
             echo '<thead class="thead-dark">
-                    <tr>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Date</th>
-                        <th>Venue</th>
-                    </tr>
-                </thead>';
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Date</th>
+                <th>Venue</th>
+                <th>Experience</th> <!-- New column -->
+            </tr>
+            </thead>';
             echo '<tbody>';
             echo '<tr>';
             echo '<td>' . $row['name'] . '</td>';
             echo '<td>' . $row['phone'] . '</td>';
             echo '<td>' . $row['post_date'] . '</td>';
             echo '<td>' . $row['post_venue'] . '</td>';
+            echo '<td>' . $row['experience'] . '</td>'; // New column data
             echo '</tr>';
+
             echo '</tbody>';
             echo '</table>';
             echo '</div>';
@@ -104,26 +110,26 @@ $displayedPhotos = []; // Array to track the displayed photos
     // Close the database connection
     $conn->close();
     ?>
-<style>
-.post {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    background-color: #ecf0f5;
-    BOX-SHADOW: 2px 10px 10px;
-}
-body{
-    background-color:#DFDFDF;
-    font-family: 'Roboto', sans-serif;
-    margin:0px
-    
-}
+        <style>
+        .post {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #ecf0f5;
+            BOX-SHADOW: 2px 10px 10px;
+        }
 
-    </style>
+        body {
+            background-color: #DFDFDF;
+            font-family: 'Roboto', sans-serif;
+            margin: 0px
+        }
+        </style>
 
-    <!-- Add Bootstrap JavaScript links if needed -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Add Bootstrap JavaScript links if needed -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>home</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="style1.css">
+    <title>home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style1.css">
 
 
-  <link rel="stylesheet" href="page2.css">
-  <style>
+    <link rel="stylesheet" href="page2.css">
+    <style>
     .post {
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
     }
+
     .post img {
-      max-width: 40%;
-      height: 300px;
+        max-width: 40%;
+        height: 300px;
     }
+
     body {
-      font-family: 'Roboto', sans-serif;
-      background-image:"#DFDFDF";
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+        font-family: 'Roboto', sans-serif;
+        background-color: "#DFDFDF";
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
     }
-  </style>
+    </style>
 </head>
+
 <body>
-<?php
+    <?php
   session_start();
 
   // Database connection
@@ -82,15 +86,15 @@
   $sql = "SELECT * FROM posts ORDER BY id DESC";
   $result = $conn->query($sql);
 ?>
-<nav class="navbar navbar-expand-sm ">
-<div class="container-fluid">
-   <a class="navbar-brand" href="#"> 
-  <p  style="color:black"> SERVIT</p>
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link text-black" href="#head">About Us</a>
-      </li>
-      <?php
+    <nav class="navbar navbar-expand-sm ">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <p style="color:black"> SERVIT</p>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="#head">About Us</a>
+                    </li>
+                    <?php
       if(isset($_SESSION["posts"])){
         echo '<li class="nav-item1">
                 <a class="nav-link text-black" href="logout.php">Logout</a>
@@ -104,196 +108,262 @@
               </li>';
       }
       ?>
-    </ul>
-  </div>
-</nav>
-<style>#name{padding-left: 500px;padding-top: 30px}
-#name1{padding-left: 618px;padding-top: 17px}
-</style>
-<div class="top">
-  <h1 id="name">WELCOME TO SERVIT </h1>
-  <h4 id="name1">Create Room</h4>
-  <form method="POST" enctype="multipart/form-data">
-    <div class="mb-3">
-      <label for="photo" class="form-label">Photo:</label>
-      <input type="file" class="form-control" id="photo" name="photo" onchange="previewImage(event)">
-      <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 50%; height: auto; margin-top: 10px;">
-      <script>
-        function previewImage(event) {
-          var input = event.target;
-          var preview = document.getElementById('imagePreview');
+                </ul>
+        </div>
+    </nav>
+    <style>
+    #name {
+        padding-left: 500px;
+        padding-top: 30px
+    }
 
-          if (input.files && input.files[0]) {
-            var reader = new FileReader();
+    #name1 {
+        padding-left: 618px;
+        padding-top: 17px
+    }
+    </style>
+    <div class="top">
+        <h1 id="name">WELCOME TO SERVIT </h1>
+        <h4 id="name1">Create Room</h4>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="photo" class="form-label" >Photo:</label>
+                <input type="file" class="form-control" id="photo" name="photo" onchange="previewImage(event)" style=" height: 60px;max-width: 648px; margin: auto; padding: 20px; border-radius: 1px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3);">
+                <img id="imagePreview" src="#" alt="Preview"
+                    style="display: none; max-width: 50%; height: auto; margin-top: 10px;">
+                <script>
+                function previewImage(event) {
+                    var input = event.target;
+                    var preview = document.getElementById('imagePreview');
 
-            reader.onload = function (e) {
-              preview.src = e.target.result;
-              preview.style.display = 'block';
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            preview.src = e.target.result;
+                            preview.style.display = 'block';
+                        }
+
+                        reader.readAsDataURL(input.files[0]);
+                    } else {
+                        preview.src = '#';
+                        preview.style.display = 'none';
+                    }
+                }
+                </script>
+            </div>
+            <style>
+            .mb-3 {
+                padding-left: 350px;
+                padding-right: 350px;
             }
 
-            reader.readAsDataURL(input.files[0]);
-          } else {
-            preview.src = '#';
-            preview.style.display = 'none';
-          }
-        }
-      </script>
+            #btn {
+                margin-left: 618px
+            }
+
+            .post {
+                margin-left: ;
+                margin-right: 450px;
+            }
+
+            .card-img-top {
+                width: 500px;
+            }
+
+            .card {
+                float: left;
+
+                margin-bottom: 20px;
+                /* Increase the bottom margin */
+            }
+
+            .work {
+                height: 200px;
+                padding-block: 23px;
+            }
+
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .post {
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 20px;
+                margin-bottom: 20px;
+                width: 50%;
+                float: left;
+            }
+
+            .post img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .post {
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 20px;
+                margin-bottom: 20px;
+                float: left;
+                width: 30%;
+            }
+
+            .post img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .mb-3 {
+                padding-left: 350px;
+                padding-right: 350px;
+            }
+
+            #btn {
+                margin-left: 618px;
+            }
+
+            .card-img-top {
+                width: 100%;
+            }
+
+            .custom-button {
+                background-color: black;
+                border-color: black;
+            }
+
+
+            .container {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: flex-start;
+            }
+
+            .post {
+                padding-right: 0px;
+                margin-top: 94px;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 20px;
+                margin-bottom: 20px;
+                width: 30%;
+                margin-right: 1.5%;
+                /* to create some space between columns */
+                box-sizing: border-box;
+                /* to include padding and border into width */
+            }
+
+            .post img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .navbar {
+                background-color:#DFDFDF; }
+
+            .nav-item {
+
+              
+
+              font-family: Helvetica , Helvetica , Helvetica, Arial, sans-serif;
+            }
+
+            .nav-item1 {
+                padding-top: 10px;
+                padding-right: 55px;
+            }
+
+            .navbar-brand {
+                display: flex;
+                align-items: center;
+                font-family: unset;
+                padding-left: 55px;
+            }
+
+            .button{
+                font-color: red;
+                background: #E48586;
+                backdrop-filter: blur(5px);
+                border-radius: 22px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 10px 20px;
+                color: white;
+                transition: all 0.3s ease;
+                font-size: 15px;
+                height: 42px;
+            }
+
+
+            .button:hover {
+                background: red;
+                transform: scale(1.05);
+            }
+            .button1{
+            
+                background: #916DB3;
+                margin-left: 590px;
+                backdrop-filter: blur(5px);
+                border-radius: 22px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 10px 20px;
+                color: black;
+                transition: all 0.3s ease;
+                font-size: 15px;
+                height: 42px;
+            }
+
+
+            .button1:hover {
+                background: rgba(255, 255, 255, 0.2);
+                transform: scale(1.05);
+            }
+            </style>
+            <form action="organiser.php" method="post"
+                style="max-width: 500px; margin: auto; padding: 20px; border-radius: 10px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3);">
+                <div class="mb-3">
+                    <label for="venue" class="form-label">Venue:</label>
+                    <input type="text" class="form-control glass-input" id="venue" name="venue">
+                </div>
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date:</label>
+                    <input type="date" class="form-control glass-input" id="date" name="date">
+                </div>
+                <div class="mb-3">
+                    <label for="limit1" class="form-label">Volunteer Limit:</label>
+                    <input type="number" class="form-control glass-input" id="limit1" name="limit">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control glass-input" id="email" name="email">
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">content</label>
+                    <input type="text" class="form-control glass-input" id="content" name="content">
+                </div>
+                <button type="submit"  class="button1" >Create Room</button>
+            </form>
+
+            <style>
+            .glass-input {
+                background: rgba(255, 255, 255, 0.1);
+                border: 3px solid rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(5px);
+                border-radius: 10px;
+                color: white;
+            }
+
+           
+           
+            </style>
+        </form>
     </div>
-    <style>
-    .mb-3{
-    padding-left: 350px;
-    padding-right: 350px;
-    }
 
-    #btn{margin-left:618px}
-    .post{margin-left:;
-    margin-right: 450px;}
-    .card-img-top{
-      width:500px;
-    }
-  
-  .card{
-    float: left;
-
-   margin-bottom: 20px; /* Increase the bottom margin */
- }
-  .work{
-    height: 200px;
-    padding-block: 23px;
-  }
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .post {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    width: 50%;  
-    float: left;
-  }
-  
-  .post img {
-    max-width: 100%; 
-    height: auto;
-  }
-  .post {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    float: left;
-    width: 30%;
-  }
-  
-  .post img {
-    max-width: 100%;
-    height: auto;
-  }
-  
-  .mb-3 {
-    padding-left: 350px;
-    padding-right: 350px;
-  }
-  
-  #btn {
-    margin-left: 618px;
-  }
-  
-  .card-img-top {
-    width: 100%; 
-  }
-  
-  .custom-button {
-    background-color: black;
-    border-color: black;
-  }
-
-  
-.container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-}
-
-.post {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    width: 30%;  
-    margin-right: 1.5%; /* to create some space between columns */
-    box-sizing: border-box; /* to include padding and border into width */
-}
-
-.post img {
-    max-width: 100%;
-    height: auto;
-}
-.navbar{
-    background-color:#DFDFDF;
-    
-  }
-  .nav-item{
-      
-    
-    font-family: 'Roboto', sans-serif;
-  }
-  .nav-item1{
-    padding-top:10px;
-    padding-right:55px;
-  }
-  .navbar-brand {
-    display: flex;
-    align-items: center;
-    font-family: unset;
-    padding-left: 55px;
-  }
-
-
-  
-    </style>
-    <div class="mb-3">
-      <label for="venue" class="form-label">Venue:</label>
-      <input type="text" class="form-control" id="venue" name="venue">
-    </div>
-    <div class="mb-3">
-      <label for="date" class="form-label">Date:</label>
-      <input type="date" class="form-control"  id="date" name="date">
-    </div>
-    <div class="mb-3">
-      <label for="limit1" class="form-label">Volunteer Limit:</label>
-      <input type="number" class="form-control"  id="limit1" name="limit">
-    </div>
-    <div class="mb-3">
-      <label for="email" class="form-label">Email:</label>
-      <input type="email" class="form-control"   id="email" name="email">
-    </div>
-    <div class="mb-3">
-      <label for="content" class="form-label">content</label>
-      <input type="text" class="form-control"  id="content" name="content">
-    </div>
-    <button type="submit" class="btn btn-primary custom-button" id="btn">Create Room</button>
-    <style> .custom-button {
-      background-color: black;
-      border-color: black;
-    }
-    .form-control {
-      background: rgba(255, 255, 255, 0.5)!important;
-    border: none !important;
-    border-radius: 4px !important;
-    box-shadow: 0 8px 6px -6px #555 !important;
-    }
-    </style>
-  </form>
-</div>
-
-<div class="container mt-4">
-  <?php
+    <div class="container mt-4">
+        <?php
   if (isset($_SESSION['message'])) {
     echo '<div class="alert alert-success">' . $_SESSION['message'] . '</div>';
     unset($_SESSION['message']);
@@ -303,9 +373,9 @@
     echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
     unset($_SESSION['error']);
   }
-
-  if ($result->num_rows > 0) {
-   while ($row = $result->fetch_assoc()) {
+//fetch code
+if ($result->num_rows > 0) {
+  while ($row = $result->fetch_assoc()) {
       echo '<div class="post">';
       echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" width="200px">';
       echo '<p>Venue: ' . $row['venue'] . '</p>';
@@ -322,22 +392,28 @@
       echo '<input type="hidden" name="limit1" value="' . $row['limit1'] . '">';
       echo '<input type="hidden" name="email" value="' . $row['email'] . '">';
       echo '<input type="hidden" name="photo" value="' . $row['photo'] . '">';
+      echo '</form>';
 
+      // Add a delete button and form to submit the post ID to delete_post.php
+      echo '<form method="POST" action="delete.php" onsubmit="return confirm(\'Are you sure you want to delete this room?\');">';
+      echo '<input type="hidden" name="postId" value="' . $row['id'] . '">';
+      echo '<button  class="button"  type="submit" name="delete">Delete</button>';
       echo '</form>';
 
       echo '</div>';
-    }
-  } else {
-    echo "No posts found";
   }
+} else {
+  echo "No posts found";
+}
 
   // Close the database connection
   $conn->close();
   ?>
-</div>
+    </div>
 
-<!-- Add Bootstrap JavaScript links if needed -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Add Bootstrap JavaScript links if needed -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

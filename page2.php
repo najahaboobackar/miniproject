@@ -20,10 +20,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $limit = $_POST['limit1'];
         $phone = $_POST['phone'];
         $name = $_POST['name'];
+        $experience = $_POST['experience'];
+
         $current_limit = 0;
 
-        $selectQuery = "SELECT limit2, limit1 FROM posts WHERE id = '$roomId'";
-        $result = $conn->query($selectQuery);
+        $checkSql = $conn->prepare("SELECT * FROM room_participants WHERE phone = ?");
+        $checkSql->bind_param('s', $phone);
+        $checkSql->execute();
+
+        $checkResult = $checkSql->get_result();
+
+        if ($checkResult->num_rows > 0) {
+            $_SESSION["error"] = "A user with this phone number already exists.";
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit();
+        }
+
+        $selectQuery = "SELECT limit2, limit1 FROM posts WHERE id = ?";
+        $stmt = $conn->prepare($selectQuery);
+        $stmt->bind_param('s', $roomId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -32,26 +50,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($current_limit < $max_limit) {
                 $current_limit++;
-
-                $updateQuery = "UPDATE posts SET limit2 = '$current_limit' WHERE id = '$roomId'";
-                $conn->query($updateQuery);
-
-                $insertQuery = "INSERT INTO room_participants (room_id, name, phone) VALUES ('$roomId', '$name', '$phone')";
-                $conn->query($insertQuery);
-
+            
+                $updateQuery = "UPDATE posts SET limit2 = ? WHERE id = ?";
+                $updateStmt = $conn->prepare($updateQuery);
+                $updateStmt->bind_param('ss', $current_limit, $roomId);
+                $updateStmt->execute();
+            
+                $insertQuery = "INSERT INTO room_participants (room_id, name, phone, content) VALUES (?, ?, ?, ?)";
+                $insertStmt = $conn->prepare($insertQuery);
+                $insertStmt->bind_param('ssss', $roomId, $name, $phone, $experience);
+                $insertStmt->execute();
+            
                 $_SESSION["success"] = "You have successfully joined the room!";
-
                 header("Location: " . $_SERVER['REQUEST_URI']);
                 exit();
             } else {
                 $_SESSION["error"] = "Sorry, the room is already full.";
-
                 header("Location: " . $_SERVER['REQUEST_URI']);
                 exit();
             }
+            
         }
     }
 }
+
+// Rest of your PHP and HTML code
+
 
 $current_date = date("Y-m-d");
 
@@ -73,40 +97,96 @@ if ($result === FALSE) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>Join Room</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet"  href="style1.css">
-  <link rel="stylesheet"  href="page2.css">
+    <title>Join Room</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    
 </head>
+
 <body>
-  <style>
-    .glassmorphism {
-      background: rgba( 255, 255, 255, 0.25 );
-      box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-      backdrop-filter: blur( 4px );
-      -webkit-backdrop-filter: blur( 4px );
-      border-radius: 10px;
-      border: 1px solid rgba( 255, 255, 255, 0.18 );
-    }
-    .navbar-brand {
-    display: flex;
-    align-items: center;
-    font-family: unset;
-    padding-left: 55px;
+    <style>
+        @keyframes textMotion {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+  }
+ 
 
-}</style>
-
-<nav class="navbar navbar-expand-sm">
-  <div class="container-fluid">
-   <a class="navbar-brand" href="#"> 
-  <p  style="color:black"> SERVIT</p>
-</a>
-    <ul class="navbar-nav ml-auto">
+  body {
+    background-color:#DFDFDF;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  font-family: 'Roboto', sans-serif;
+}
+.navbar{
+    background-color:#DFDFDF;
+    
+  }
+  .nav-item{
       
-      <?php
+    padding-right: 55px;
+    font-family: 'Roboto', sans-serif;
+  }
+    .glassmorphism {
+        background: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        font-family: unset;
+        padding-left: 55px;
+    }
+
+    .fname {
+
+        width: 79%;
+        padding: 5px 10px;
+        margin: 2px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .button {
+    margin-top: 12px;
+    background: #916DB3;
+    backdrop-filter: blur(5px);
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px 16px;
+    color: black;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    margin-left: 208px;
+}
+
+
+    .button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
+    </style>
+
+    <nav class="navbar navbar-expand-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <p style="color:black"> SERVIT</p>
+            </a>
+            <ul class="navbar-nav ml-auto">
+
+                <?php
       if (isset($_SESSION["posts"])) {
           echo '<li class="nav-item">
                 <a class="nav-link text-black" href="logout.php">Logout</a>
@@ -117,18 +197,31 @@ if ($result === FALSE) {
               </li>';
       }
       ?>
-    </ul>
-  </div>
-</nav>
-<style>#text{margin-left:0px}</style>
-<div id="text" class="container mt-4">
-<h2 class="join-room-heading" style="color: #916DB3; padding-bottom: 10px;">Join Room</h2>
- 
-</div>
+            </ul>
+        </div>
+    </nav>
+    <style>
+    #text {
+        margin-left: 0px
+    }
+
+    #head1 {
+        font-size: 34px;
+        font-family: system-ui;
+        font-weight: 350;
+        margin-left: 63px;
+        color: black;
+    }
+    
+    </style>
+    <div id=head1>
+        <p>JOIN ROOM</p>
+
+    </div>
 
 
 
-<?php
+    <?php
 if (isset($_SESSION['success'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
     unset($_SESSION['success']);
@@ -140,10 +233,10 @@ if (isset($_SESSION['error'])) {
 }
 ?>
 
-  <?php
+    <?php
   if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
-          echo '<div class="post glassmorphism" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; width: 48%; float: left; margin-right: 2%; margin-bottom: 2%;">';
+          echo '<div class="post glassmorphism" style="border: 6px solid #ccc; padding: 4px;; margin-bottom: 20px; ;float: left; margin-right: 0%; margin-left: 58px; margin-bottom: 2%;">';
           if (isset($row['photo'])) {
               echo '<img src="' . $row['photo'] . '" class="card-img-top" alt="Post Photo" style="width: 100%; height: auto;">';
           }
@@ -153,15 +246,49 @@ if (isset($_SESSION['error'])) {
           echo '<p>Email: ' . $row['email'] . '</p>';
           echo '<p>Content: ' . $row['content'] . '</p>';
 
-          echo '<form method="POST">';
+          if (isset($_POST['join'])) {
+            $phone = $_POST['phone'];
+        
+            // Using a prepared statement to prevent SQL injection
+            $stmt = $conn->prepare("SELECT * FROM room_participants WHERE phone = ?");
+            $stmt->bind_param("s", $phone); // "s" indicates that the parameter is a string
+            $stmt->execute();
+        
+            $check_result = $stmt->get_result();
+        
+            if ($check_result->num_rows > 0) {
+                echo "A user with this phone number already exists.";
+            } else {
+                // Insert the user's data into the database
+                $stmt = $conn->prepare("INSERT INTO room_participants (name, phone,content) VALUES (?, ?, ?)");
+                $stmt->bind_param("ssss", $_POST['name'], $phone,$experience);
+                $stmt->execute();
+        
+                echo "You've successfully joined the room!";
+            }
+        
+            $stmt->close();
+        }
+        
+
+          echo '<form method="POST" >';
           echo '<input type="hidden" name="p" value="' . $row['id'] . '">';
           echo '<input type="hidden" name="venue" value="' . $row['venue'] . '">';
           echo '<input type="hidden" name="date" value="' . $row['date'] . '">';
           echo '<input type="hidden" name="limit1" value="' . $row['limit2'] . '/' . $row['limit1'] . '">';
           echo '<input type="hidden" name="email" value="' . $row['email'] . '">';
-          echo '<input type="text" name="name" placeholder="Enter your name" required><br>';
-          echo '<input type="text" name="phone" placeholder="Phone number" required>'; 
-          echo '<button type="submit" name="join" class="btn btn-primary custom-button">Join</button>';
+          echo '<input type="text" name="name" placeholder="Enter your name" required class="fname" ><br>';
+          echo '<input type="text" name="phone" placeholder="Phone number" class="fname" required><br>'; 
+          echo '<p>Previous experience:</p>';
+          echo '<input type="radio" id="option1" name="radiobutton" value="option1">';
+          echo '<label for="option1">YES</label>';
+          echo '<input type="radio" id="option2" name="radiobutton" value="option2">';
+          echo '<label for="option2">NO</label><br>';
+          
+          echo '<input type="text" name="experience" placeholder="Enter your experience" required id="experience" class="fname" style="visibility:hidden;"><br>';
+
+          echo '<button type="submit" name="join" class="button" onclick="return confirm(\'Terms and Conditions  \n\n By using this website, you hereby acknowledge and agree to abide by our policies, including our Privacy Policy, and agree not to misuse this website for any fraudulent or malicious activities. Any content found on this site is our exclusive property and should not be used without explicit permission. We reserve the right to terminate access for users found violating these terms. All disputes arising from the use of our website will be governed by the laws of our jurisdiction.\');">Join</button>';
+          
 
           echo '</form>';
 
@@ -171,10 +298,27 @@ if (isset($_SESSION['error'])) {
       echo "No posts found";
   }
   $conn->close();
-  ?>
+?>
 
-<!-- Add Bootstrap JavaScript links if needed -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Add Bootstrap JavaScript links if needed -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+$(document).ready(function() {
+    $("input[name='radiobutton']").click(function() {
+        if ($(this).val() == 'option1') {
+            $("#experience").css('visibility', 'visible');
+            $("#experience").prop('required',true);
+        }
+        else {
+            $("#experience").css('visibility', 'hidden');
+            $("#experience").prop('required',false);
+        }
+    });
+});
+</script>
+
 
 </body>
+
 </html>
